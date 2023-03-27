@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(conan_template CXX)
+project(chip8 CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(fmt REQUIRED)
