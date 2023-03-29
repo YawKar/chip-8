@@ -4,8 +4,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(fmt REQUIRED)
 
-set(SRCS src/main.cpp)
+# Add Chip8
+set(CHIP8 src/chip8/Chip8.cpp)
 
+# Combine sources
+set(SRCS src/main.cpp ${CHIP8})
+
+# Make executable
 add_executable(${PROJECT_NAME} ${SRCS})
 
 if(MSVC)
@@ -15,4 +20,3 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
-
