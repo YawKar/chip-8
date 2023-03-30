@@ -6,7 +6,7 @@
 #include <fstream>
 #include <memory>
 
-namespace chip {
+namespace chips {
 
 Chip8::Chip8()
     : rand_gen(std::chrono::system_clock::now().time_since_epoch().count()),
@@ -390,4 +390,4 @@ void Chip8::OP_FX65() {
     registers[i] = memory[index_register + i];
   }
 }
-}  // namespace chip
+}  // namespace chips

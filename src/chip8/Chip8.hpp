@@ -4,7 +4,7 @@
 #include <random>
 #include <string>
 
-namespace chip {
+namespace chips {
 class Chip8 {
  public:
   static const uint32_t START_ADDRESS = 0x200;
@@ -32,17 +32,17 @@ class Chip8 {
       0xF0, 0x80, 0xF0, 0x80, 0x80   // F
   };
 
-  uint8_t registers[16];
+  uint8_t registers[16]{0};
   uint8_t stack_pointer;
   uint16_t index_register;
   uint16_t program_counter;
   uint8_t delay_timer;
   uint8_t sound_timer;
   uint16_t opcode;
-  uint8_t memory[4096];
-  uint8_t keypad[16];
-  uint16_t stack[16];
-  uint32_t video[VIDEO_WIDTH * VIDEO_HEIGHT];
+  uint8_t memory[4096]{0};
+  uint8_t keypad[16]{0};
+  uint16_t stack[16]{0};
+  uint32_t video[VIDEO_WIDTH * VIDEO_HEIGHT]{0};
   std::default_random_engine rand_gen;
   std::uniform_int_distribution<uint8_t> rand_byte;
 
@@ -86,6 +86,6 @@ class Chip8 {
   void OP_FX55();
   void OP_FX65();
 };
-}  // namespace chip
+}  // namespace chips
 
 #endif  // CHIP8_HPP
