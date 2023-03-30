@@ -8,8 +8,11 @@ namespace chip {
 class Chip8 {
  public:
   static const uint32_t START_ADDRESS = 0x200;
+  static const uint16_t VIDEO_HEIGHT = 32;
+  static const uint16_t VIDEO_WIDTH = 64;
   static const uint32_t FONTSET_START_ADDRESS = 0x50;
   static const uint32_t FONTSET_SIZE = 80;
+  static const uint32_t FONTSET_SYMBOL_HEIGHT = 5;
   const uint8_t fontset[FONTSET_SIZE]{
       0xF0, 0x90, 0x90, 0x90, 0xF0,  // 0
       0x20, 0x60, 0x20, 0x20, 0x70,  // 1
@@ -39,7 +42,7 @@ class Chip8 {
   uint8_t memory[4096];
   uint8_t keypad[16];
   uint16_t stack[16];
-  uint32_t video[64 * 32];
+  uint32_t video[VIDEO_WIDTH * VIDEO_HEIGHT];
   std::default_random_engine rand_gen;
   std::uniform_int_distribution<uint8_t> rand_byte;
 
