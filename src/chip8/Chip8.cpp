@@ -42,11 +42,11 @@ void Chip8::cycle() {
 void Chip8::execute_opcode() {
   switch (opcode >> 12u) {
     case 0:
-      switch (uint16_t address = opcode & 0x0FFFu) {
-        case 0x00E0u:
+      switch (opcode & 0x0FFFu) {
+        case 0x0E0u:
           OP_00E0();
           break;
-        case 0x00EEu:
+        case 0x0EEu:
           OP_00EE();
           break;
         default:
@@ -77,7 +77,7 @@ void Chip8::execute_opcode() {
       OP_7XKK();
       break;
     case 8:
-      switch (uint8_t last = (opcode & 0x000Fu)) {
+      switch (opcode & 0x000Fu) {
         case 0:
           OP_8XY0();
           break;
@@ -132,7 +132,7 @@ void Chip8::execute_opcode() {
       OP_DXYN();
       break;
     case 0xEu:
-      switch (uint8_t last_two = (opcode & 0x00FFu)) {
+      switch (opcode & 0x00FFu) {
         case 0x9Eu:
           OP_EX9E();
           break;
@@ -146,7 +146,7 @@ void Chip8::execute_opcode() {
       }
       break;
     case 0xFu:
-      switch (uint8_t last_two = (opcode & 0x00FFu)) {
+      switch (opcode & 0x00FFu) {
         case 0x07u:
           OP_FX07();
           break;
