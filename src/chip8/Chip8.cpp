@@ -1,5 +1,7 @@
 #include "Chip8.hpp"
 
+#include <fmt/core.h>
+
 #include <chrono>
 #include <fstream>
 #include <memory>
@@ -26,6 +28,162 @@ void Chip8::load_ROM(const std::string& filename) {
     for (uint32_t offset = 0; offset < size; ++offset) {
       memory[START_ADDRESS + offset] = buffer[offset];
     }
+  }
+}
+
+void Chip8::cycle() {
+  opcode = ((memory[program_counter] << 8u) | memory[program_counter + 1]);
+  program_counter += 2;
+  execute_opcode();
+  if (delay_timer > 0) delay_timer--;
+  if (sound_timer > 0) sound_timer--;
+}
+
+void Chip8::execute_opcode() {
+  switch (opcode >> 12u) {
+    case 0:
+      switch (uint16_t address = opcode & 0x0FFFu) {
+        case 0x00E0u:
+          OP_00E0();
+          break;
+        case 0x00EEu:
+          OP_00EE();
+          break;
+        default:
+          throw std::runtime_error(
+              fmt::format("Unknown opcode: {0:#06x}.", opcode));
+          break;
+      }
+      break;
+    case 1:
+      OP_1NNN();
+      break;
+    case 2:
+      OP_2NNN();
+      break;
+    case 3:
+      OP_3XKK();
+      break;
+    case 4:
+      OP_4XKK();
+      break;
+    case 5:
+      OP_5XY0();
+      break;
+    case 6:
+      OP_6XKK();
+      break;
+    case 7:
+      OP_7XKK();
+      break;
+    case 8:
+      switch (uint8_t last = (opcode & 0x000Fu)) {
+        case 0:
+          OP_8XY0();
+          break;
+        case 1:
+          OP_8XY1();
+          break;
+        case 2:
+          OP_8XY2();
+          break;
+        case 3:
+          OP_8XY3();
+          break;
+        case 4:
+          OP_8XY4();
+          break;
+        case 5:
+          OP_8XY5();
+          break;
+        case 6:
+          OP_8XY6();
+          break;
+        case 7:
+          OP_8XY7();
+          break;
+        case 0xEu:
+          OP_8XYE();
+          break;
+        default:
+          throw std::runtime_error(
+              fmt::format("Unknown opcode: {0:#06x}.", opcode));
+          break;
+      }
+      break;
+    case 9:
+      if (!(opcode & 0x000Fu)) {
+        OP_9XY0();
+      } else {
+        throw std::runtime_error(
+            fmt::format("Unknown opcode: {0:#06x}.", opcode));
+      }
+      break;
+    case 0xAu:
+      OP_ANNN();
+      break;
+    case 0xBu:
+      OP_BNNN();
+      break;
+    case 0xCu:
+      OP_CXKK();
+      break;
+    case 0xDu:
+      OP_DXYN();
+      break;
+    case 0xEu:
+      switch (uint8_t last_two = (opcode & 0x00FFu)) {
+        case 0x9Eu:
+          OP_EX9E();
+          break;
+        case 0xA1u:
+          OP_EXA1();
+          break;
+        default:
+          throw std::runtime_error(
+              fmt::format("Unknown opcode: {0:#06x}.", opcode));
+          break;
+      }
+      break;
+    case 0xFu:
+      switch (uint8_t last_two = (opcode & 0x00FFu)) {
+        case 0x07u:
+          OP_FX07();
+          break;
+        case 0x0Au:
+          OP_FX0A();
+          break;
+        case 0x15u:
+          OP_FX15();
+          break;
+        case 0x18u:
+          OP_FX18();
+          break;
+        case 0x1Eu:
+          OP_FX1E();
+          break;
+        case 0x29u:
+          OP_FX29();
+          break;
+        case 0x33u:
+          OP_FX33();
+          break;
+        case 0x55u:
+          OP_FX55();
+          break;
+        case 0x65u:
+          OP_FX65();
+          break;
+        default:
+          throw std::runtime_error(
+              fmt::format("Unknown opcode: {0:#06x}.", opcode));
+          break;
+      }
+      break;
+    default:
+      throw std::runtime_error(
+          fmt::format("Unknown opcode: {0:#06x}.", opcode));
+      break;
   }
 }
 

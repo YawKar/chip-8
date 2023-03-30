@@ -49,6 +49,8 @@ class Chip8 {
   Chip8();
 
   void load_ROM(const std::string& filename);
+  void cycle();
+  void execute_opcode();
   void OP_00E0();
   void OP_00EE();
   void OP_1NNN();
